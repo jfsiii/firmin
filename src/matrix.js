@@ -384,7 +384,9 @@ FirminCSSMatrix.toMatrixString = function (transformValue) {
 
         get: function() {
             return this[key3d];
-        }
+        },
+        enumerable : true,
+        configurable : true
     });
 });
 
