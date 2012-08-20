@@ -629,3 +629,33 @@ FirminCSSMatrix.prototype.toString = function() {
         return self[p].toFixed(6);
     }).join(", ") + ")";
 };
+
+/**
+ *  FirminCSSMatrix#skewX(skewX) -> FirminCSSMatrix
+ *  - skewX (Number): the scaling factor in the x axis.
+ *
+ *  Returns the result of skewing the matrix by a given vector.
+ **/
+FirminCSSMatrix.prototype.skewX = function(degrees) {
+    var radians = FirminCSSMatrix.degreesToRadians(degrees);
+    var transform = new FirminCSSMatrix();
+
+    transform.c = Math.tan(radians);
+
+    return this.multiply(transform);
+};
+
+/**
+ *  FirminCSSMatrix#skewY(skewY) -> FirminCSSMatrix
+ *  - skewY (Number): the scaling factor in the x axis.
+ *
+ *  Returns the result of skewing the matrix by a given vector.
+ **/
+FirminCSSMatrix.prototype.skewY = function(degrees) {
+    var radians = FirminCSSMatrix.degreesToRadians(degrees);
+    var transform = new FirminCSSMatrix();
+
+    transform.b = Math.tan(radians);
+
+    return this.multiply(transform);
+};

@@ -170,6 +170,7 @@ JS.ENV.CSSMatrixSpec = JS.Test.describe('FirminCSSMatrix', function() {
             this.CSSMatrix = FirminCSSMatrix;
         });
 
+        // from http://src.chromium.org/svn/branches/WebKit/472/LayoutTests/transforms/cssmatrix-2d-interface.xhtml
         this.describe('2D', function () {
             this.describe('constructors', function () {
                 this.it('should return a value when called via the default constructor', function () {
@@ -302,6 +303,36 @@ JS.ENV.CSSMatrixSpec = JS.Test.describe('FirminCSSMatrix', function() {
 
                         this.assertEqual(1, parseFloat(m.a));
                         this.assertEqual(0, parseFloat(m.b));
+                        this.assertEqual(0, parseFloat(m.c));
+                        this.assertEqual(1, parseFloat(m.d));
+                        this.assertEqual(0, parseFloat(m.e));
+                        this.assertEqual(0, parseFloat(m.f));
+                    });
+                });
+
+                this.describe('skewX()', function () {
+                    this.it('should skew properly', function () {
+                        var degrees = 114.591559;
+                        var m = (new this.CSSMatrix()).skewX(degrees);
+                        var refString = "matrix(1.000000, 0.000000, -2.185040, 1.000000, 0.000000, 0.000000)"
+
+                        this.assertEqual(1, parseFloat(m.a));
+                        this.assertEqual(0, parseFloat(m.b));
+                        this.assertEqual(-2.185040, Number(parseFloat(m.c).toPrecision(7)));
+                        this.assertEqual(1, parseFloat(m.d));
+                        this.assertEqual(0, parseFloat(m.e));
+                        this.assertEqual(0, parseFloat(m.f));
+                    });
+                });
+
+                this.describe('skewY()', function () {
+                    this.it('should skew properly', function () {
+                        var degrees = 114.591559;
+                        var m = (new this.CSSMatrix()).skewY(degrees);
+                        var refString = "matrix(1.000000, -2.185040, 0.000000, 1.000000, 0.000000, 0.000000)";
+
+                        this.assertEqual(1, parseFloat(m.a));
+                        this.assertEqual(-2.185040, Number(parseFloat(m.b).toPrecision(7)));
                         this.assertEqual(0, parseFloat(m.c));
                         this.assertEqual(1, parseFloat(m.d));
                         this.assertEqual(0, parseFloat(m.e));
@@ -475,6 +506,7 @@ JS.ENV.CSSMatrixSpec = JS.Test.describe('FirminCSSMatrix', function() {
             });
         });
 
+        // from http://src.chromium.org/svn/branches/WebKit/472/LayoutTests/transforms/cssmatrix-3d-interface.xhtml
         this.describe('3D', function () {
             this.describe('constructors', function () {
                 this.it('should return a value when called via the default constructor', function () {
