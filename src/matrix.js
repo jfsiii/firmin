@@ -260,6 +260,8 @@ FirminCSSMatrix.prototype.isAffine = function() {
  *  Multiplies the matrix by a given matrix and returns the result.
  **/
 FirminCSSMatrix.prototype.multiply = function(otherMatrix) {
+    if (!otherMatrix) return null;
+
     var a = otherMatrix,
         b = this,
         c = new FirminCSSMatrix();
