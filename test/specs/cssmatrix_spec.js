@@ -499,7 +499,7 @@ JS.ENV.CSSMatrixSpec = JS.Test.describe('FirminCSSMatrix', function() {
                     });
 
                     this.it('should throw an exception on when inversion is impossible', function () {
-                        var m = new WebKitCSSMatrix("matrix(0, 0, 0, 0, 0, 0)"); // not invertible
+                        var m = new this.CSSMatrix("matrix(0, 0, 0, 0, 0, 0)"); // not invertible
                         this.assertThrows(Error, function () { m.inverse(); });
                     });
                 });
