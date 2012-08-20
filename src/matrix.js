@@ -697,6 +697,36 @@ FirminCSSMatrix.prototype.scale = function(scaleX, scaleY, scaleZ) {
 };
 
 /**
+ *  FirminCSSMatrix#skewX(skewX) -> FirminCSSMatrix
+ *  - skewX (Number): the scaling factor in the x axis.
+ *
+ *  Returns the result of skewing the matrix by a given vector.
+ **/
+FirminCSSMatrix.prototype.skewX = function(degrees) {
+    var radians = FirminCSSMatrix.degreesToRadians(degrees);
+    var transform = new FirminCSSMatrix();
+
+    transform.c = Math.tan(radians);
+
+    return this.multiply(transform);
+};
+
+/**
+ *  FirminCSSMatrix#skewY(skewY) -> FirminCSSMatrix
+ *  - skewY (Number): the scaling factor in the x axis.
+ *
+ *  Returns the result of skewing the matrix by a given vector.
+ **/
+FirminCSSMatrix.prototype.skewY = function(degrees) {
+    var radians = FirminCSSMatrix.degreesToRadians(degrees);
+    var transform = new FirminCSSMatrix();
+
+    transform.b = Math.tan(radians);
+
+    return this.multiply(transform);
+};
+
+/**
  *  FirminCSSMatrix#translate(x, y, z) -> FirminCSSMatrix
  *  - x (Number): the x component of the vector.
  *  - y (Number): the y component of the vector.
@@ -778,34 +808,4 @@ FirminCSSMatrix.prototype.toString = function() {
     return prefix + points.map(function(p) {
         return self[p].toFixed(6);
     }).join(", ") + ")";
-};
-
-/**
- *  FirminCSSMatrix#skewX(skewX) -> FirminCSSMatrix
- *  - skewX (Number): the scaling factor in the x axis.
- *
- *  Returns the result of skewing the matrix by a given vector.
- **/
-FirminCSSMatrix.prototype.skewX = function(degrees) {
-    var radians = FirminCSSMatrix.degreesToRadians(degrees);
-    var transform = new FirminCSSMatrix();
-
-    transform.c = Math.tan(radians);
-
-    return this.multiply(transform);
-};
-
-/**
- *  FirminCSSMatrix#skewY(skewY) -> FirminCSSMatrix
- *  - skewY (Number): the scaling factor in the x axis.
- *
- *  Returns the result of skewing the matrix by a given vector.
- **/
-FirminCSSMatrix.prototype.skewY = function(degrees) {
-    var radians = FirminCSSMatrix.degreesToRadians(degrees);
-    var transform = new FirminCSSMatrix();
-
-    transform.b = Math.tan(radians);
-
-    return this.multiply(transform);
 };
