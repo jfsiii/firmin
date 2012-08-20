@@ -112,6 +112,154 @@ FirminCSSMatrix.determinant4x4 = function(m) {
 };
 
 /**
+ * FirminCSSMatrix.toMatrixString(transformValue) -> String
+ * - transformValue (String): `el.style.WebkitTransform`-style string (like `rotate(18rad) translate3d(50px, 100px, 10px)`)
+ *
+ * Tranforms a `el.style.WebkitTransform`-style string
+ * (like `rotate(18rad) translate3d(50px, 100px, 10px)`)
+ * into a `getComputedStyle(el)`-style matrix string
+ * (like `matrix3d(0.6603167082440828, -0.7509872467716737, 0, 0, 0.7509872467716737, 0.6603167082440828, 0, 0, 0, 0, 1, 0, 108.11456008937151, 28.482308485824596, 10, 1)`)
+ **/
+FirminCSSMatrix.toMatrixString = function (transformValue) {
+    var rgx = {
+        functionSignature: /(\w+)\([^\)]+\)/ig,
+        nameAndArguments: /(\w+)\(([^\)]+)\)/i,
+        units: /([-\+]?[0-9]+[\.0-9]*)(deg|rad|grad|px|%)*/
+    };
+    var transformStatements = transformValue.match(/(\w+)\([^\)]+\)/ig);
+    var onlyMatrices = transformStatements && transformStatements.every(function (t) { return (/^matrix/).test(t) });
+    if (!transformStatements || onlyMatrices) return transformValue;
+
+    var values = function (o) { return o.value };
+    var cssFunctionToJsFunction = {
+        matrix: function (m, o) {
+            var m2 = new FirminCSSMatrix(o.unparsed);
+
+            return m.multiply(m2)
+        },
+        matrix3d: function (m, o) {
+            var m2 = new FirminCSSMatrix(o.unparsed);
+
+            return m.multiply(m2)
+        },
+
+        perspective: function (m, o) {
+            var m2 = new FirminCSSMatrix();
+            m2.m34 -= 1 / o.value[0].value;
+
+            return m.multiply(m2);
+        },
+
+        rotate: function (m, o) {
+            return m.rotate.apply(m, o.value.map(values))
+        },
+        rotate3d: function (m, o) {
+            return m.rotateAxisAngle.apply(m, o.value.map(values))
+        },
+        rotateX: function (m, o) {
+            return m.rotate.apply(m, [o.value[0].value, 0, 0]);
+        },
+        rotateY: function (m, o) {
+            return m.rotate.apply(m, [0, o.value[0].value, 0]);
+        },
+        rotateZ: function (m, o) {
+            return m.rotate.apply(m, [0, 0, o.value[0].value]);
+        },
+
+        scale: function (m, o) {
+            return m.scale.apply(m, o.value.map(values));
+        },
+        scale3d: function (m, o) {
+            return m.scale.apply(m, o.value.map(values));
+        },
+        scaleX: function (m, o) {
+            return m.scale.apply(m, o.value.map(values));
+        },
+        scaleY: function (m, o) {
+            return m.scale.apply(m, [0, o.value[0].value, 0]);
+        },
+        scaleZ: function (m, o) {
+            return m.scale.apply(m, [0, 0, o.value[0].value]);
+        },
+
+        skew: function (m, o) {
+            var mX = new FirminCSSMatrix('skewX(' + o.value[0].unparsed + ')');
+            var mY = new FirminCSSMatrix('skewY(' + o.value[1].unparsed + ')');
+            var sM = 'matrix(1.00000, '+ mY.b +', '+ mX.c +', 1.000000, 0.000000, 0.000000)';
+            var m2 = new FirminCSSMatrix(sM);
+
+            return m.multiply(m2);
+        },
+        skewX: function (m, o) {
+            return m.skewX.apply(m, [o.value[0].value]);
+        },
+        skewY: function (m, o) {
+            return m.skewY.apply(m, [o.value[0].value]);
+        },
+
+        translate: function (m, o) {
+            return m.translate.apply(m, o.value.map(values));
+        },
+        translate3d: function (m, o) {
+            return m.translate.apply(m, o.value.map(values));
+        },
+        translateX: function (m, o) {
+            return m.translate.apply(m, [o.value[0].value, 0, 0]);
+        },
+        translateY: function (m, o) {
+            return m.translate.apply(m, [0, o.value[0].value, 0]);
+        },
+        translateZ: function (m, o) {
+            return m.translate.apply(m, [0, 0, o.value[0].value]);
+        }
+    };
+    var parseTransformStatement = function (str) {
+        var pair = str.match(rgx.nameAndArguments).slice(1);
+
+        return {
+            key: pair[0],
+            value: pair[1].split(/, ?/).map(function (value) {
+                var parts = value.match(/([-\+]?[0-9]+[\.0-9]*)(deg|rad|grad|px|%)*/) || [];
+
+                return {
+                    value: parseFloat(parts[1]),
+                    units: parts[2],
+                    unparsed: value
+                };
+            }),
+            unparsed: str
+        };
+
+        return o;
+    };
+
+    var transformOperations = transformStatements.map(parseTransformStatement);
+    var startingMatrix = new FirminCSSMatrix();
+    var transformedMatrix = transformOperations.reduce(function (matrix, operation) {
+        // convert to degrees b/c all CSSMatrix methods expect degrees
+        operation.value = operation.value.map(function (operation) {
+            if (operation.units == 'rad') {
+                operation.value = operation.value * (180 / Math.PI);
+                operation.units = 'deg';
+            }
+            else if (operation.units == 'grad') {
+                operation.value = operation.value / (400 / 360); // 400 gradians in 360 degrees
+                operation.units = 'deg'
+            }
+
+            return operation;
+        });
+
+        var jsFunction = cssFunctionToJsFunction[operation.key];
+        var result = jsFunction(matrix, operation);
+
+        return result || matrix;
+    }, startingMatrix);
+
+    return transformedMatrix.toString();
+};
+
+/**
  *  FirminCSSMatrix#a -> Number
  *  The first 2D vector value.
  **/
@@ -578,7 +726,7 @@ FirminCSSMatrix.prototype.translate = function(x, y, z) {
  *  by the [[FirminCSSMatrix#toString]] method.
  **/
 FirminCSSMatrix.prototype.setMatrixValue = function(domstr) {
-        domstr = domstr.trim();
+        domstr = FirminCSSMatrix.toMatrixString(domstr.trim());
     var mstr   = domstr.match(/^matrix(3d)?\(\s*(.+)\s*\)$/),
         is3d, chunks, len, points, i, chunk;
 
