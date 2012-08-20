@@ -1,4 +1,4 @@
-JS.ENV.CSSMatrixSpec = JS.Test.describe('FirminCSSMatrix', function() {
+JS.ENV.FirminCSSMatrixSpec = JS.Test.describe('FirminCSSMatrix', function() {
     this.describe('FirminCSSMatrix', function () {
         this.before(function() {
             var POINTS = this.POINTS = ['m11', 'm12', 'm13', 'm14',
@@ -164,7 +164,9 @@ JS.ENV.CSSMatrixSpec = JS.Test.describe('FirminCSSMatrix', function() {
             this.assertEqual(a.toString(), b.toString());
         });
     });
+});
 
+JS.ENV.CSSMatrixSpec = JS.Test.describe('CSSMatrix', function() {
     this.describe('CSSMatrix', function () {
         this.before(function () {
             this.CSSMatrix = FirminCSSMatrix;
@@ -985,5 +987,4 @@ JS.ENV.CSSMatrixSpec = JS.Test.describe('FirminCSSMatrix', function() {
             });
         });
     });
-
 });
