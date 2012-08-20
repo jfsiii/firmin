@@ -29,12 +29,12 @@
  **/
 FirminCSSMatrix = function(domstr) {
     this.m11 = this.m22 = this.m33 = this.m44 = 1;
-    
+
                this.m12 = this.m13 = this.m14 =
     this.m21 =            this.m23 = this.m24 =
     this.m31 = this.m32 =            this.m34 =
     this.m41 = this.m42 = this.m43            = 0;
-    
+
     if (typeof domstr == "string") {
         this.setMatrixValue(domstr);
     }
@@ -98,13 +98,13 @@ FirminCSSMatrix.determinant3x3 = function(a1, a2, a3, b1, b2, b3, c1, c2, c3) {
  **/
 FirminCSSMatrix.determinant4x4 = function(m) {
     var determinant3x3 = FirminCSSMatrix.determinant3x3,
-    
+
     // Assign to individual variable names to aid selecting correct elements
     a1 = m.m11, b1 = m.m21, c1 = m.m31, d1 = m.m41,
     a2 = m.m12, b2 = m.m22, c2 = m.m32, d2 = m.m42,
     a3 = m.m13, b3 = m.m23, c3 = m.m33, d3 = m.m43,
     a4 = m.m14, b4 = m.m24, c4 = m.m34, d4 = m.m44;
-    
+
     return a1 * determinant3x3(b2, b3, b4, c2, c3, c4, d2, d3, d4) -
            b1 * determinant3x3(a2, a3, a4, c2, c3, c4, d2, d3, d4) +
            c1 * determinant3x3(a2, a3, a4, b2, b3, b4, d2, d3, d4) -
@@ -228,12 +228,12 @@ FirminCSSMatrix.determinant4x4 = function(m) {
  ["m41", "e"],
  ["m42", "f"]].forEach(function(pair) {
     var key3d = pair[0], key2d = pair[1];
-    
+
     Object.defineProperty(FirminCSSMatrix.prototype, key2d, {
         set: function(val) {
             this[key3d] = val;
         },
-        
+
         get: function() {
             return this[key3d];
         }
@@ -263,27 +263,27 @@ FirminCSSMatrix.prototype.multiply = function(otherMatrix) {
     var a = otherMatrix,
         b = this,
         c = new FirminCSSMatrix();
-    
+
     c.m11 = a.m11 * b.m11 + a.m12 * b.m21 + a.m13 * b.m31 + a.m14 * b.m41;
     c.m12 = a.m11 * b.m12 + a.m12 * b.m22 + a.m13 * b.m32 + a.m14 * b.m42;
     c.m13 = a.m11 * b.m13 + a.m12 * b.m23 + a.m13 * b.m33 + a.m14 * b.m43;
     c.m14 = a.m11 * b.m14 + a.m12 * b.m24 + a.m13 * b.m34 + a.m14 * b.m44;
-    
+
     c.m21 = a.m21 * b.m11 + a.m22 * b.m21 + a.m23 * b.m31 + a.m24 * b.m41;
     c.m22 = a.m21 * b.m12 + a.m22 * b.m22 + a.m23 * b.m32 + a.m24 * b.m42;
     c.m23 = a.m21 * b.m13 + a.m22 * b.m23 + a.m23 * b.m33 + a.m24 * b.m43;
     c.m24 = a.m21 * b.m14 + a.m22 * b.m24 + a.m23 * b.m34 + a.m24 * b.m44;
-    
+
     c.m31 = a.m31 * b.m11 + a.m32 * b.m21 + a.m33 * b.m31 + a.m34 * b.m41;
     c.m32 = a.m31 * b.m12 + a.m32 * b.m22 + a.m33 * b.m32 + a.m34 * b.m42;
     c.m33 = a.m31 * b.m13 + a.m32 * b.m23 + a.m33 * b.m33 + a.m34 * b.m43;
     c.m34 = a.m31 * b.m14 + a.m32 * b.m24 + a.m33 * b.m34 + a.m34 * b.m44;
-    
+
     c.m41 = a.m41 * b.m11 + a.m42 * b.m21 + a.m43 * b.m31 + a.m44 * b.m41;
     c.m42 = a.m41 * b.m12 + a.m42 * b.m22 + a.m43 * b.m32 + a.m44 * b.m42;
     c.m43 = a.m41 * b.m13 + a.m42 * b.m23 + a.m43 * b.m33 + a.m44 * b.m43;
     c.m44 = a.m41 * b.m14 + a.m42 * b.m24 + a.m43 * b.m34 + a.m44 * b.m44;
-    
+
     return c;
 };
 
@@ -308,33 +308,33 @@ FirminCSSMatrix.prototype.isIdentityOrTranslation = function() {
 FirminCSSMatrix.prototype.adjoint = function() {
     var result = new FirminCSSMatrix(), t = this,
         determinant3x3 = FirminCSSMatrix.determinant3x3,
-        
+
         a1 = t.m11, b1 = t.m12, c1 = t.m13, d1 = t.m14,
         a2 = t.m21, b2 = t.m22, c2 = t.m23, d2 = t.m24,
         a3 = t.m31, b3 = t.m32, c3 = t.m33, d3 = t.m34,
         a4 = t.m41, b4 = t.m42, c4 = t.m43, d4 = t.m44;
-    
+
     // Row column labeling reversed since we transpose rows & columns
     result.m11 =  determinant3x3(b2, b3, b4, c2, c3, c4, d2, d3, d4);
     result.m21 = -determinant3x3(a2, a3, a4, c2, c3, c4, d2, d3, d4);
     result.m31 =  determinant3x3(a2, a3, a4, b2, b3, b4, d2, d3, d4);
     result.m41 = -determinant3x3(a2, a3, a4, b2, b3, b4, c2, c3, c4);
-    
+
     result.m12 = -determinant3x3(b1, b3, b4, c1, c3, c4, d1, d3, d4);
     result.m22 =  determinant3x3(a1, a3, a4, c1, c3, c4, d1, d3, d4);
     result.m32 = -determinant3x3(a1, a3, a4, b1, b3, b4, d1, d3, d4);
     result.m42 =  determinant3x3(a1, a3, a4, b1, b3, b4, c1, c3, c4);
-    
+
     result.m13 =  determinant3x3(b1, b2, b4, c1, c2, c4, d1, d2, d4);
     result.m23 = -determinant3x3(a1, a2, a4, c1, c2, c4, d1, d2, d4);
     result.m33 =  determinant3x3(a1, a2, a4, b1, b2, b4, d1, d2, d4);
     result.m43 = -determinant3x3(a1, a2, a4, b1, b2, b4, c1, c2, c4);
-    
+
     result.m14 = -determinant3x3(b1, b2, b3, c1, c2, c3, d1, d2, d3);
     result.m24 =  determinant3x3(a1, a2, a3, c1, c2, c3, d1, d2, d3);
     result.m34 = -determinant3x3(a1, a2, a3, b1, b2, b3, d1, d2, d3);
     result.m44 =  determinant3x3(a1, a2, a3, b1, b2, b3, c1, c2, c3);
-    
+
     return result;
 };
 
@@ -345,35 +345,35 @@ FirminCSSMatrix.prototype.adjoint = function() {
  **/
 FirminCSSMatrix.prototype.inverse = function() {
     var inv, det, result, i, j;
-    
+
     if (this.isIdentityOrTranslation()) {
         inv = new FirminCSSMatrix();
-        
+
         if (!(this.m41 === 0 && this.m42 === 0 && this.m43 === 0)) {
             inv.m41 = -this.m41;
             inv.m42 = -this.m42;
             inv.m43 = -this.m43;
         }
-        
+
         return inv;
     }
-    
+
     // Calculate the adjoint matrix
     result = this.adjoint();
-    
+
     // Calculate the 4x4 determinant
     det = FirminCSSMatrix.determinant4x4(this);
-    
+
     // If the determinant is zero, then the inverse matrix is not unique
     if (Math.abs(det) < 1e-8) return null;
-    
+
     // Scale the adjoint matrix to get the inverse
     for (i = 1; i < 5; i++) {
         for (j = 1; j < 5; j++) {
             result[("m" + i) + j] /= det;
         }
     }
-    
+
     return result;
 };
 
@@ -392,56 +392,56 @@ FirminCSSMatrix.prototype.inverse = function() {
  **/
 FirminCSSMatrix.prototype.rotate = function(rx, ry, rz) {
     var degreesToRadians = FirminCSSMatrix.degreesToRadians;
-    
+
     if (typeof rx != "number" || isNaN(rx)) rx = 0;
-    
+
     if ((typeof ry != "number" || isNaN(ry)) &&
         (typeof rz != "number" || isNaN(rz))) {
         rz = rx;
         rx = 0;
         ry = 0;
     }
-    
+
     if (typeof ry != "number" || isNaN(ry)) ry = 0;
     if (typeof rz != "number" || isNaN(rz)) rz = 0;
-    
+
     rx = degreesToRadians(rx);
     ry = degreesToRadians(ry);
     rz = degreesToRadians(rz);
-    
+
     var tx = new FirminCSSMatrix(),
         ty = new FirminCSSMatrix(),
         tz = new FirminCSSMatrix(),
         sinA, cosA, sinA2;
-    
+
     rz /= 2;
     sinA = Math.sin(rz);
     cosA = Math.cos(rz);
     sinA2 = sinA * sinA;
-    
+
     // Matrices are identity outside the assigned values
     tz.m11 = tz.m22 = 1 - 2 * sinA2;
     tz.m12 = tz.m21 = 2 * sinA * cosA;
     tz.m21 *= -1;
-    
+
     ry /= 2;
     sinA  = Math.sin(ry);
     cosA  = Math.cos(ry);
     sinA2 = sinA * sinA;
-    
+
     ty.m11 = ty.m33 = 1 - 2 * sinA2;
     ty.m13 = ty.m31 = 2 * sinA * cosA;
     ty.m13 *= -1;
-    
+
     rx /= 2;
     sinA = Math.sin(rx);
     cosA = Math.cos(rx);
     sinA2 = sinA * sinA;
-    
+
     tx.m22 = tx.m33 = 1 - 2 * sinA2;
     tx.m23 = tx.m32 = 2 * sinA * cosA;
     tx.m32 *= -1;
-    
+
     return tz.multiply(ty).multiply(tx).multiply(this);
 };
 
@@ -466,16 +466,16 @@ FirminCSSMatrix.prototype.rotateAxisAngle = function(x, y, z, a) {
     if (typeof z != "number" || isNaN(z)) z = 0;
     if (typeof a != "number" || isNaN(a)) a = 0;
     if (x === 0 && y === 0 && z === 0) z = 1;
-    
+
     var t   = new FirminCSSMatrix(),
         len = Math.sqrt(x * x + y * y + z * z),
         cosA, sinA, sinA2, csA, x2, y2, z2;
-    
+
     a     = (FirminCSSMatrix.degreesToRadians(a) || 0) / 2;
     cosA  = Math.cos(a);
     sinA  = Math.sin(a);
     sinA2 = sinA * sinA;
-    
+
     // Bad vector, use something sensible
     if (len === 0) {
         x = 0;
@@ -486,7 +486,7 @@ FirminCSSMatrix.prototype.rotateAxisAngle = function(x, y, z, a) {
         y /= len;
         z /= len;
     }
-    
+
     // Optimise cases where axis is along major axis
     if (x === 1 && y === 0 && z === 0) {
         t.m22 = t.m33 = 1 - 2 * sinA2;
@@ -505,7 +505,7 @@ FirminCSSMatrix.prototype.rotateAxisAngle = function(x, y, z, a) {
         x2  = x * x;
         y2  = y * y;
         z2  = z * z;
-        
+
         t.m11 = 1 - 2 * (y2 + z2) * sinA2;
         t.m12 = 2 * (x * y * sinA2 + z * csA);
         t.m13 = 2 * (x * z * sinA2 - y * csA);
@@ -516,7 +516,7 @@ FirminCSSMatrix.prototype.rotateAxisAngle = function(x, y, z, a) {
         t.m32 = 2 * (z * y * sinA2 - x * csA);
         t.m33 = 1 - 2 * (x2 + y2) * sinA2;
     }
-    
+
     return this.multiply(t);
 };
 
@@ -532,15 +532,15 @@ FirminCSSMatrix.prototype.rotateAxisAngle = function(x, y, z, a) {
  **/
 FirminCSSMatrix.prototype.scale = function(scaleX, scaleY, scaleZ) {
     var transform = new FirminCSSMatrix();
-    
+
     if (typeof scaleX != "number" || isNaN(scaleX)) scaleX = 1;
     if (typeof scaleY != "number" || isNaN(scaleY)) scaleY = scaleX;
     if (typeof scaleZ != "number" || isNaN(scaleZ)) scaleZ = 1;
-    
+
     transform.m11 = scaleX;
     transform.m22 = scaleY;
     transform.m33 = scaleZ;
-    
+
     return this.multiply(transform);
 };
 
@@ -554,15 +554,15 @@ FirminCSSMatrix.prototype.scale = function(scaleX, scaleY, scaleZ) {
  **/
 FirminCSSMatrix.prototype.translate = function(x, y, z) {
     var t = new FirminCSSMatrix();
-    
+
     if (typeof x != "number" || isNaN(x)) x = 0;
     if (typeof y != "number" || isNaN(y)) y = 0;
     if (typeof z != "number" || isNaN(z)) z = 0;
-    
+
     t.m41 = x;
     t.m42 = y;
     t.m43 = z;
-    
+
     return this.multiply(t);
 };
 
@@ -579,23 +579,23 @@ FirminCSSMatrix.prototype.setMatrixValue = function(domstr) {
         domstr = domstr.trim();
     var mstr   = domstr.match(/^matrix(3d)?\(\s*(.+)\s*\)$/),
         is3d, chunks, len, points, i, chunk;
-    
+
     if (!mstr) return;
-    
+
     is3d   = !!mstr[1];
     chunks = mstr[2].split(/\s*,\s*/);
     len    = chunks.length;
     points = new Array(len);
-    
+
     if ((is3d && len !== 16) || !(is3d || len === 6)) return;
-    
+
     for (i = 0; i < len; i++) {
         chunk = chunks[i];
         if (chunk.match(/^-?\d+(\.\d+)?$/)) {
             points[i] = parseFloat(chunk);
         } else return;
     }
-    
+
     for (i = 0; i < len; i++) {
         point = is3d ?
             ("m" + (Math.floor(i / 4) + 1)) + (i % 4 + 1) :
@@ -611,7 +611,7 @@ FirminCSSMatrix.prototype.setMatrixValue = function(domstr) {
  **/
 FirminCSSMatrix.prototype.toString = function() {
     var self = this, points, prefix;
-    
+
     if (this.isAffine()) {
         prefix = "matrix(";
         points = ["a", "b", "c", "d", "e", "f"];
@@ -622,7 +622,7 @@ FirminCSSMatrix.prototype.toString = function() {
                   "m31", "m32", "m33", "m34",
                   "m41", "m42", "m43", "m44"];
     }
-    
+
     return prefix + points.map(function(p) {
         return self[p].toFixed(6);
     }).join(", ") + ")";
