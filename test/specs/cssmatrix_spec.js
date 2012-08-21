@@ -121,6 +121,14 @@ JS.ENV.FirminCSSMatrixSpec = JS.Test.describe('FirminCSSMatrix', function() {
                                      b.rotate(x, y, z));
         });
 
+        this.it('is equal under mutiple transforms to the reference implementation', function(){
+            var skewedString = (new WebKitCSSMatrix('skew(20deg, 40deg)')).toString();
+            // "matrix(1.000000, 0.839100, 0.363970, 1.000000, 0.000000, 0.000000)"
+
+            this.assertMatricesEqual((new WebKitCSSMatrix(skewedString)).rotate(90),
+                                     (new FirminCSSMatrix(skewedString)).rotate(90));
+        });
+
         this.it('deserialises to the same values as the reference implementation', function() {
             var a  = new WebKitCSSMatrix(),
                 b  = new FirminCSSMatrix(),
