@@ -598,7 +598,7 @@ FirminCSSMatrix.prototype.rotate = function(rx, ry, rz) {
 
     return (isIdentity)
         ? tz.multiply(ty).multiply(tx)
-        : this.multiply(tx).multiply(ty).multiply(tz)
+        : this.multiply(tx).multiply(ty).multiply(tz);
 };
 
 /**
