@@ -594,7 +594,11 @@ FirminCSSMatrix.prototype.rotate = function(rx, ry, rz) {
     tx.m23 = tx.m32 = 2 * sinA * cosA;
     tx.m32 *= -1;
 
-    return tz.multiply(ty).multiply(tx).multiply(this);
+    var isIdentity = (this.toString() === (new FirminCSSMatrix).toString());
+
+    return (isIdentity)
+        ? tz.multiply(ty).multiply(tx)
+        : this.multiply(tx).multiply(ty).multiply(tz)
 };
 
 /**
