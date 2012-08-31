@@ -219,7 +219,7 @@ FirminCSSMatrix.toMatrixString = function (transformValue) {
         return {
             key: pair[0],
             value: pair[1].split(/, ?/).map(function (value) {
-                var parts = value.match(/([-\+]?[0-9]+[\.0-9]*)(deg|rad|grad|px|%)*/) || [];
+                var parts = value.match(rgx.units) || [];
 
                 return {
                     value: parseFloat(parts[1]),
