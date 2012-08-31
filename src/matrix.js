@@ -124,23 +124,23 @@ FirminCSSMatrix.toMatrixString = function (transformValue) {
     var rgx = {
         functionSignature: /(\w+)\([^\)]+\)/ig,
         nameAndArguments: /(\w+)\(([^\)]+)\)/i,
-        units: /([-\+]?[0-9]+[\.0-9]*)(deg|rad|grad|px|%)*/
+        units: /([\-\+]?[0-9]+[\.0-9]*)(deg|rad|grad|px|%)*/
     };
     var transformStatements = transformValue.match(/(\w+)\([^\)]+\)/ig);
-    var onlyMatrices = transformStatements && transformStatements.every(function (t) { return (/^matrix/).test(t) });
+    var onlyMatrices = transformStatements && transformStatements.every(function (t) { return (/^matrix/).test(t); });
     if (!transformStatements || onlyMatrices) return transformValue;
 
-    var values = function (o) { return o.value };
+    var values = function (o) { return o.value; };
     var cssFunctionToJsFunction = {
         matrix: function (m, o) {
             var m2 = new FirminCSSMatrix(o.unparsed);
 
-            return m.multiply(m2)
+            return m.multiply(m2);
         },
         matrix3d: function (m, o) {
             var m2 = new FirminCSSMatrix(o.unparsed);
 
-            return m.multiply(m2)
+            return m.multiply(m2);
         },
 
         perspective: function (m, o) {
@@ -151,10 +151,10 @@ FirminCSSMatrix.toMatrixString = function (transformValue) {
         },
 
         rotate: function (m, o) {
-            return m.rotate.apply(m, o.value.map(values))
+            return m.rotate.apply(m, o.value.map(values));
         },
         rotate3d: function (m, o) {
-            return m.rotateAxisAngle.apply(m, o.value.map(values))
+            return m.rotateAxisAngle.apply(m, o.value.map(values));
         },
         rotateX: function (m, o) {
             return m.rotate.apply(m, [o.value[0].value, 0, 0]);
@@ -229,8 +229,6 @@ FirminCSSMatrix.toMatrixString = function (transformValue) {
             }),
             unparsed: str
         };
-
-        return o;
     };
 
     var transformOperations = transformStatements.map(parseTransformStatement);
@@ -244,7 +242,7 @@ FirminCSSMatrix.toMatrixString = function (transformValue) {
             }
             else if (operation.units == 'grad') {
                 operation.value = operation.value / (400 / 360); // 400 gradians in 360 degrees
-                operation.units = 'deg'
+                operation.units = 'deg';
             }
 
             return operation;
