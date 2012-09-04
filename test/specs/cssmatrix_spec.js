@@ -271,6 +271,32 @@ JS.ENV.CSSMatrixSpec = JS.Test.describe('CSSMatrix', function() {
                         this.assertEqual(3, m.d);
                         this.assertEqual(10, m.e);
                         this.assertEqual(20, m.f);
+
+                        // Test each transform function
+                        // list from http://dev.w3.org/csswg/css3-2d-transforms/#transform-functions
+
+                        // matrix
+                        var a=0.1, b=0.2, c=0.3, d=0.4, e=0.5, f=0.6;
+                        var constructorString = 'matrix(' + [a,b,c,d,e,f].join(',') + ')';
+                        m = new this.CSSMatrix(constructorString);
+
+                        this.assertFloatsApproxEqual(a, m.a);
+                        this.assertFloatsApproxEqual(b, m.b);
+                        this.assertFloatsApproxEqual(c, m.c);
+                        this.assertFloatsApproxEqual(d, m.d);
+                        this.assertFloatsApproxEqual(e, m.e);
+                        this.assertFloatsApproxEqual(f, m.f);
+
+                        // TODO:
+                        // translate
+                        // translateX
+                        // translateY
+                        // scale
+                        // scaleX
+                        // scaleY
+                        // rotate
+                        // skewX
+                        // skewY
                     });
 
                     this.it('should throw exception on bad arguments', function () {
