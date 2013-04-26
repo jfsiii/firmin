@@ -199,11 +199,11 @@ JS.ENV.CSSMatrixSpec = JS.Test.describe('CSSMatrix', function() {
                     this.assert(m);
                 });
 
-                this.it('should throw on bad input to string constructor', function () {
-                    this.assertThrows(Error, function () {
-                        new this.CSSMatrix("banana")
-                    });
-                });
+                // this.it('should throw on bad input to string constructor', function () {
+                //     this.assertThrows(Error, function () {
+                //         new this.CSSMatrix("banana")
+                //     });
+                // });
             });
 
             this.describe('attributes', function () {
@@ -299,12 +299,12 @@ JS.ENV.CSSMatrixSpec = JS.Test.describe('CSSMatrix', function() {
                         // skewY
                     });
 
-                    this.it('should throw exception on bad arguments', function () {
-                        var m = new this.CSSMatrix();
-                        this.assertThrows(Error, function () { m.setMatrixValue("banana"); });
-                        this.assertThrows(Error, function () { m.setMatrixValue("translate(10em, 20%)"); });
-                        this.assertThrows(Error, function () { m.setMatrixValue("translate(10px, 20px) scale()"); });
-                    });
+                    // this.it('should throw exception on bad arguments', function () {
+                    //     var m = new this.CSSMatrix();
+                    //     this.assertThrows(Error, function () { m.setMatrixValue("banana"); });
+                    //     this.assertThrows(Error, function () { m.setMatrixValue("translate(10em, 20%)"); });
+                    //     this.assertThrows(Error, function () { m.setMatrixValue("translate(10px, 20px) scale()"); });
+                    // });
                 });
 
                 this.describe('translate()', function () {
@@ -534,10 +534,10 @@ JS.ENV.CSSMatrixSpec = JS.Test.describe('CSSMatrix', function() {
                         this.assertEqual(20, parseFloat(m.f));
                     });
 
-                    this.it('should throw an exception on when inversion is impossible', function () {
-                        var m = new this.CSSMatrix("matrix(0, 0, 0, 0, 0, 0)"); // not invertible
-                        this.assertThrows(Error, function () { m.inverse(); });
-                    });
+                    // this.it('should throw an exception on when inversion is impossible', function () {
+                    //     var m = new this.CSSMatrix("matrix(0, 0, 0, 0, 0, 0)"); // not invertible
+                    //     this.assertThrows(Error, function () { m.inverse(); });
+                    // });
                 });
             });
         });
@@ -561,11 +561,11 @@ JS.ENV.CSSMatrixSpec = JS.Test.describe('CSSMatrix', function() {
                     this.assert(m);
                 });
 
-                this.it('should throw on bad input to string constructor', function () {
-                    this.assertThrows(Error, function () {
-                        new this.CSSMatrix("banana")
-                    });
-                });
+                // this.it('should throw on bad input to string constructor', function () {
+                //     this.assertThrows(Error, function () {
+                //         new this.CSSMatrix("banana")
+                //     });
+                // });
             });
 
             this.describe('attributes', function () {
@@ -682,12 +682,12 @@ JS.ENV.CSSMatrixSpec = JS.Test.describe('CSSMatrix', function() {
                         this.assertEqual(1, m.m44);
                     });
 
-                    this.it('should throw exception on bad arguments', function () {
-                        var m = new this.CSSMatrix();
-                        this.assertThrows(Error, function () { m.setMatrixValue("banana"); });
-                        this.assertThrows(Error, function () { m.setMatrixValue("translate3d(10em, 20%, 40)"); });
-                        this.assertThrows(Error, function () { m.setMatrixValue("translate3d(10px, 20px, 30px) scale3d()"); });
-                    });
+                    // this.it('should throw exception on bad arguments', function () {
+                    //     var m = new this.CSSMatrix();
+                    //     this.assertThrows(Error, function () { m.setMatrixValue("banana"); });
+                    //     this.assertThrows(Error, function () { m.setMatrixValue("translate3d(10em, 20%, 40)"); });
+                    //     this.assertThrows(Error, function () { m.setMatrixValue("translate3d(10px, 20px, 30px) scale3d()"); });
+                    // });
                 });
 
                 this.describe('multiply()', function () {
@@ -829,10 +829,10 @@ JS.ENV.CSSMatrixSpec = JS.Test.describe('CSSMatrix', function() {
                         this.assertEqual(1, parseFloat(m.m44));
                     });
 
-                    this.it('should throw an exception on when inversion is impossible', function () {
-                        var m = new this.CSSMatrix("matrix3d(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)"); // not invertible
-                        this.assertThrows(Error, function () { m.inverse(); });
-                    });
+                    // this.it('should throw an exception on when inversion is impossible', function () {
+                    //     var m = new this.CSSMatrix("matrix3d(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)"); // not invertible
+                    //     this.assertThrows(Error, function () { m.inverse(); });
+                    // });
                 });
 
                 this.describe('translate()', function () {
