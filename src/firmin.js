@@ -15,9 +15,9 @@ Firmin = (typeof Firmin == 'undefined') ? {} : Firmin;
 /**
  *  Firmin.CSSMatrix -> String
  **/
-Firmin.CSSMatrix = (typeof WebKitCSSMatrix == 'object')
-                 ? WebKitCSSMatrix
-                 : FirminCSSMatrix;
+ Firmin.CSSMatrix = (typeof WebKitCSSMatrix == "undefined")
+                  ? FirminCSSMatrix
+                  : WebKitCSSMatrix;
 
 /**
  *  Firmin.prefix -> String
