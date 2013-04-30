@@ -15,6 +15,15 @@ Firmin
 [transforms]:  http://www.w3.org/TR/css3-2d-transforms/
 [transitions]: http://www.w3.org/TR/css3-transitions/
 
+Tests and Browser Support
+-------------------------
+
+You can run [the test pages](http://jfsiii.github.io/firmin/test/) in your browser. The matrix code has been extracted into another project, [XCSSMatrix](http://github.com/jfsiii/XCSSMatrix). 
+
+XCSSMatrix's browser support is: 
+Chrome 6+, Safari 5+, FF4+, Opera 11+, IE9+
+
+[!['Test results'](https://ci.testling.com/jfsiii/XCSSMatrix.png "Test results")](https://ci.testling.com/jfsiii/XCSSMatrix)
 
 Development
 -----------
