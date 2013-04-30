@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html><head>
     <title>Firmin 3D transform tests</title>
-    
+
     <style type="text/css" media="screen">
         html, body {font-family:Helvetica, Arial, sans-serif; color:#000; background:#fff; margin:0; border:none; padding:0;}
         body {margin:50px;}
-        
+
         .container {
             position:relative;
             float:left;
@@ -15,7 +15,7 @@
             border:1px solid #ccc;
             padding:50px;
         }
-        
+
         .legend {
             margin:0;
             position:absolute;
@@ -24,7 +24,7 @@
             font-weight:bold;
             background:#fff;
         }
-        
+
         .transform-css, .transform-js {
             position:absolute;
             top:50px;
@@ -33,30 +33,50 @@
             height:200px;
             opacity:0.5;
         }
-        
+
         .transform-css {
-            background:-webkit-gradient(linear, 0 0, 0 100%, from(#f00), to(#fff));
+            background: -webkit-linear-gradient(top, #f00, #fff); /* For Chrome and Safari */
+            background:    -moz-linear-gradient(top, #f00, #fff); /* For old Fx (3.6 to 15) */
+            background:     -ms-linear-gradient(top, #f00, #fff); /* For pre-releases of IE 10*/
+            background:      -o-linear-gradient(top, #f00, #fff); /* For old Opera (11.1 to 12.0) */
+            background:         linear-gradient(to bottom, #f00, #fff); /* Standard syntax; must be last */
         }
-        
+
         .transform-js {
-            background:-webkit-gradient(linear, 0 0, 0 100%, from(#00f), to(#fff));
+            background: -webkit-linear-gradient(top, #00f, #fff); /* For Chrome and Safari */
+            background:    -moz-linear-gradient(top, #00f, #fff); /* For old Fx (3.6 to 15) */
+            background:     -ms-linear-gradient(top, #00f, #fff); /* For pre-releases of IE 10*/
+            background:      -o-linear-gradient(top, #00f, #fff); /* For old Opera (11.1 to 12.0) */
+            background:         linear-gradient(to bottom, #00f, #fff); /* Standard syntax; must be last */
         }
-        
+
         #test-translate .transform-css {
-            -webkit-transform:translate3d(20px, 20px, 20px);
+            -webkit-transform: translate3d(20px, 20px, 20px);
+               -moz-transform: translate3d(20px, 20px, 20px);
+                -ms-transform: translate3d(20px, 20px, 20px);
+                 -o-transform: translate3d(20px, 20px, 20px);
+                    transform: translate3d(20px, 20px, 20px);
         }
-        
+
         #test-rotate .transform-css {
-            -webkit-transform:rotate3d(0, 1, 1, 2rad);
+            -webkit-transform: rotate3d(0, 1, 1, 2rad);
+               -moz-transform: rotate3d(0, 1, 1, 2rad);
+                -ms-transform: rotate3d(0, 1, 1, 2rad);
+                 -o-transform: rotate3d(0, 1, 1, 2rad);
+                    transform: rotate3d(0, 1, 1, 2rad);
         }
-        
+
         #test-scale .transform-css {
-            -webkit-transform:rotateZ(1rad) scale3d(1, 1, 2);
+            -webkit-transform: rotateZ(1rad) scale3d(1, 1, 2);
+               -moz-transform: rotateZ(1rad) scale3d(1, 1, 2);
+                -ms-transform: rotateZ(1rad) scale3d(1, 1, 2);
+                 -o-transform: rotateZ(1rad) scale3d(1, 1, 2);
+                    transform: rotateZ(1rad) scale3d(1, 1, 2);
         }
     </style>
-    
+
     <script type="text/javascript" src="lib/all-min.js"></script>
-    
+
     <script type="text/javascript" charset="utf-8">
         window.$ = function(query) {
             return document.querySelector(query);
@@ -64,42 +84,42 @@
     </script>
 </head><body>
     <h1 id="description">Transform tests</h1>
-    
+
     <p>Red boxes are transformed with CSS, blue boxes with Firmin.</p>
-    
+
     <p>
         Boxes not lining up exactly (producing a purple box) indicates a
         regression.
     </p>
-    
+
     <div class="container" id="test-translate">
         <div class="transform-css"></div>
         <div class="transform-js"></div>
         <p class="legend">Translate</p>
     </div>
-    
+
     <script type="text/javascript">
         Firmin.translate3d($('#test-translate .transform-js'), ["20px", "20px", "20px"]);
     </script>
-    
+
     <div class="container" id="test-rotate">
         <div class="transform-css"></div>
         <div class="transform-js"></div>
         <p class="legend">Rotate</p>
     </div>
-    
+
     <script type="text/javascript">
         Firmin.rotate3d($('#test-rotate .transform-js'), {
             x: 0, y: 1, z: 1, angle: "2rad"
         });
     </script>
-    
+
     <div class="container" id="test-scale">
         <div class="transform-css"></div>
         <div class="transform-js"></div>
         <p class="legend">Scale</p>
     </div>
-    
+
     <script type="text/javascript">
         Firmin.animate($('#test-scale .transform-js'), {
             rotateZ: "1rad",
