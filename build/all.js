@@ -829,9 +829,9 @@ Firmin = (typeof Firmin == 'undefined') ? {} : Firmin;
 /**
  *  Firmin.CSSMatrix -> String
  **/
-Firmin.CSSMatrix = (typeof WebKitCSSMatrix == 'object')
-                 ? WebKitCSSMatrix
-                 : FirminCSSMatrix;
+ Firmin.CSSMatrix = (typeof WebKitCSSMatrix == "undefined")
+                  ? FirminCSSMatrix
+                  : WebKitCSSMatrix;
 
 /**
  *  Firmin.prefix -> String
@@ -847,7 +847,7 @@ Firmin.prefix = (function() {
         prefixes = ["webkit", "Moz", "O"],
         i        = 3,
         prefix;
-    
+
     while (i--) {
         prefix = prefixes[i];
         test.style.cssText = "-" + prefix.toLowerCase() +
@@ -855,7 +855,7 @@ Firmin.prefix = (function() {
         if (typeof test.style[prefix + "TransitionProperty"] != "undefined")
             return prefix;
     }
-    
+
     return prefix;
 })();
 
@@ -870,16 +870,16 @@ Firmin.prefix = (function() {
  **/
 Firmin.matrixToString = function(ctm) {
     if (Firmin.prefix != "Moz") return ctm.toString();
-    
+
     var prefix = "matrix(",
         points = ["a", "b", "c", "d", "e", "f"];
-    
+
     return prefix + points.map(function(p, i) {
         var str = ctm[p].toFixed(6);
-        
+
         // Gecko accepts length values for translate values, not numbers.
         if (i > 3) str += "px";
-        
+
         return str;
     }).join(", ") + ")";
 };
@@ -899,14 +899,14 @@ Firmin.matrixToString = function(ctm) {
  **/
 Firmin.angleToRadians = function(type, magnitude) {
     var ratio;
-    
+
     switch (type) {
         case "rad"  : return magnitude;
         case "deg"  : ratio = Math.PI / 180; break;
         case "grad" : ratio = Math.PI / 200; break;
         case "turn" : ratio = Math.PI * 2;   break;
     }
-    
+
     return ratio * magnitude;
 };
 
@@ -926,7 +926,7 @@ Firmin.angleToRadians = function(type, magnitude) {
  **/
 Firmin.pointToVector = function(point) {
     if (!point) return null;
-    
+
     return point instanceof Array ? point : [point.x, point.y, point.z];
 };
 
@@ -972,15 +972,15 @@ Firmin.NUMBER_PATTERN = /^-?\d+(\.\d+)?/;
 Firmin.parseNumeric = function(units, def) {
     return function(input) {
         var unit, magnitude;
-        
+
         if (typeof input == "number") {
             return [def, input];
         } else if (typeof input != "string") {
             return null;
         }
-        
+
         magnitude = (input.match(Firmin.NUMBER_PATTERN) || [""])[0];
-        
+
         if (magnitude.length === input.length) {
             unit = def;
         } else {
@@ -988,7 +988,7 @@ Firmin.parseNumeric = function(units, def) {
                 return input.substr(magnitude.length) === u;
             })[0];
         }
-        
+
         return unit && magnitude ? [unit, parseFloat(magnitude)] : null;
     };
 };
@@ -1085,13 +1085,13 @@ Firmin.Transform.parse = function(description, context) {
         rest      = {},
         transform = null,
         matrix, origin;
-    
+
     if (typeof context === "object" && context.transform) {
         matrix    = context.transform.ctm;
         origin    = context.transform.centre;
         transform = new Firmin.Transform(matrix, origin);
     }
-    
+
     for (property in description) {
         if (methods.indexOf(property) !== -1) {
             transform = transform || new Firmin.Transform();
@@ -1103,7 +1103,7 @@ Firmin.Transform.parse = function(description, context) {
             rest[property] = description[property];
         }
     }
-    
+
     return {result: transform, remainder: rest};
 };
 
@@ -1117,16 +1117,16 @@ Firmin.Transform.parse = function(description, context) {
  **/
 Firmin.Transform.prototype.build = function(properties) {
     var centre = this.centre;
-    
+
     if (Firmin.prefix == "O") {
         centre = centre.slice(0, 2);
     }
-    
+
     properties = properties || {};
-    
+
     properties[Firmin.prefix + "Transform"]       = Firmin.matrixToString(this.ctm);
     properties[Firmin.prefix + "TransformOrigin"] = centre.join(" ");
-    
+
     return properties;
 };
 
@@ -1141,7 +1141,7 @@ Firmin.Transform.prototype.build = function(properties) {
 Firmin.Transform.prototype.matrix   =
 Firmin.Transform.prototype.matrix3d = function(v) {
     var t = new Firmin.CSSMatrix();
-    
+
     if (v.length === 6) {
         t.a = v[0];
         t.b = v[1];
@@ -1167,7 +1167,7 @@ Firmin.Transform.prototype.matrix3d = function(v) {
         t.m43 = v[14];
         t.m44 = v[15];
     }
-    
+
     this.ctm = this.ctm.multiply(t);
 };
 
@@ -1192,7 +1192,7 @@ Firmin.Transform.prototype.matrix3d = function(v) {
 Firmin.Transform.prototype.translate   =
 Firmin.Transform.prototype.translate3d = function(distances) {
     var vector, x, y, z;
-    
+
     if (typeof distances == "number" || typeof distances == "string") {
         x = y = parseInt(distances, 10) || 0;
         z = 0;
@@ -1201,12 +1201,12 @@ Firmin.Transform.prototype.translate3d = function(distances) {
         x      = vector[0];
         y      = vector[1];
         z      = vector[2];
-        
+
         if (typeof x != "number") x = parseInt(x, 10) || 0;
         if (typeof y != "number") y = parseInt(y, 10) || 0;
         if (typeof z != "number") z = parseInt(z, 10) || 0;
     }
-    
+
     this.ctm = this.ctm.translate(x, y, z);
 };
 
@@ -1258,7 +1258,7 @@ Firmin.Transform.prototype.translateZ = function(distance) {
 Firmin.Transform.prototype.scale   =
 Firmin.Transform.prototype.scale3d = function(magnitudes) {
     var vector, x, y, z;
-    
+
     if (typeof magnitudes == "number") {
         x = y = magnitudes;
         z = 1;
@@ -1268,7 +1268,7 @@ Firmin.Transform.prototype.scale3d = function(magnitudes) {
         y      = vector[1];
         z      = vector[2];
     }
-    
+
     this.ctm = this.ctm.scale(x, y, z);
 };
 
@@ -1319,7 +1319,7 @@ Firmin.Transform.prototype.skew = function(angles) {
     var parseAngle = Firmin.parseAngle,
         angle2rads = Firmin.angleToRadians,
         x, y;
-    
+
     if (typeof angles == "number" || typeof angles == "string") {
         x = y = angle2rads.apply(null, parseAngle(angles)) || 0;
     } else {
@@ -1327,7 +1327,7 @@ Firmin.Transform.prototype.skew = function(angles) {
         x      = angle2rads.apply(null, parseAngle(angles[0])) || 0;
         y      = angle2rads.apply(null, parseAngle(angles[1])) || 0;
     }
-    
+
     this.matrix([1, Math.tan(y), Math.tan(x), 1, 0, 0]);
 };
 
@@ -1361,7 +1361,7 @@ Firmin.Transform.prototype.rotate = function(a) {
     // Normalise angle to radians and then convert to degrees
     a = Firmin.angleToRadians.apply(null, Firmin.parseAngle(a)) *
         (180 / Math.PI);
-    
+
     this.ctm = this.ctm.rotate(0, 0, a);
 };
 
@@ -1379,15 +1379,15 @@ Firmin.Transform.prototype.rotate3d = function(params) {
         y   = params.y,
         z   = params.z,
         a   = params.angle;
-    
+
     if (typeof x != "number") x = 0;
     if (typeof y != "number") y = 0;
     if (typeof z != "number") z = 0;
-    
+
     // Normalise angle to radians and then convert to degrees
     a = Firmin.angleToRadians.apply(null, Firmin.parseAngle(a)) *
         (180 / Math.PI);
-    
+
     this.ctm = this.ctm.rotateAxisAngle(x, y, z, a);
 };
 
@@ -1430,7 +1430,7 @@ Firmin.Transform.prototype.rotateZ = function(angle) {
  **/
 Firmin.Transform.prototype.origin = function(origin) {
     var vector = Firmin.pointToVector(origin), v1, v2, v3;
-    
+
     if ((v0 = vector[0])) this.centre[0] = v0;
     if ((v1 = vector[1])) this.centre[1] = v1;
     if ((v2 = vector[2])) this.centre[2] = v2;
@@ -1497,7 +1497,7 @@ Firmin.Transition.parse = function(description, context) {
         rest       = {},
         transition = new Firmin.Transition(),
         duration, delay;
-    
+
     for (p in description) {
         if (methods.indexOf(p) !== -1) {
             if (p === "properties" && typeof p == "string") {
@@ -1517,7 +1517,7 @@ Firmin.Transition.parse = function(description, context) {
             rest[p] = description[p];
         }
     }
-    
+
     return {result: transition, remainder: rest};
 };
 
@@ -1570,20 +1570,20 @@ Firmin.Transition.prototype.getDelay = function() {
  **/
 Firmin.Transition.prototype.build = function(properties) {
     properties = properties || {};
-    
+
     if (typeof this.properties == "string") {
         properties[Firmin.prefix + "TransitionProperty"] = this.properties;
     } else {
         properties[Firmin.prefix + "TransitionProperty"] = this.properties.join(", ");
     }
-    
+
     properties[Firmin.prefix + "TransitionDuration"] = this.duration[1] + this.duration[0];
     properties[Firmin.prefix + "TransitionDelay"]    = this.delay[1] + this.delay[0];
-    
+
     if (this.timingFunction) {
         properties[Firmin.prefix + "TransitionTimingFunction"] = this.timingFunction;
     }
-    
+
     return properties;
 };
 
@@ -1623,19 +1623,19 @@ Firmin.Transition.prototype.build = function(properties) {
  **/
 Firmin.Animation = function(description, context) {
     var tsp, trp;
-    
+
     if (typeof description.callback == "function") {
         this.callback = description.callback;
     }
-    
+
     delete description.callback;
-    
+
     tsp = Firmin.Transition.parse(description, context);
     this.transition = tsp.result;
-    
+
     trp = Firmin.Transform.parse(tsp.remainder, context);
     this.transform  = trp.result;
-    
+
     this.style = trp.remainder;
 };
 
@@ -1667,10 +1667,10 @@ Firmin.Animation.prototype.getTotalDuration = function() {
  **/
 Firmin.Animation.prototype.exec = function(element) {
     var properties = this.style, property;
-    
+
     if (this.transition) properties = this.transition.build(properties);
     if (this.transform)  properties = this.transform.build(properties);
-    
+
     for (property in properties) {
         element.style[property] = properties[property];
     }
@@ -1709,7 +1709,7 @@ Firmin.Animation.prototype.exec = function(element) {
  **/
 Firmin.Animated = function(element) {
     var self = this;
-    
+
     this.element    = element;
     this.operations = [];
     this.callback   = null;
@@ -1724,23 +1724,23 @@ Firmin.Animated = function(element) {
 Firmin.Animated.prototype.run = function() {
     var animation = this.operations.shift(),
         self      = this;
-    
+
     if (!animation) {
         this.fired = true;
         return this;
     }
-    
+
     setTimeout(function() {
         animation.exec(self.element);
     }, 10);
-    
+
     setTimeout(function() {
         self.fireCallback();
         self.run();
     }, animation.getTotalDuration() || 10);
-    
+
     this.callback = animation.callback;
-    
+
     return this;
 };
 
@@ -1751,7 +1751,7 @@ Firmin.Animated.prototype.run = function() {
  **/
 Firmin.Animated.prototype.fireCallback = function() {
     var callback = this.callback;
-    
+
     if (typeof callback === "function") {
         callback.call(null, this.element);
     }
@@ -1767,12 +1767,12 @@ Firmin.Animated.prototype.fireCallback = function() {
 Firmin.Animated.prototype.__animate__ = function(animation) {
     this.operations.push(animation);
     this.__lastAnim = animation;
-    
+
     if (this.fired) {
         this.fired = false;
         this.run();
     }
-    
+
     return this;
 };
 
@@ -1790,7 +1790,7 @@ Firmin.Animated.prototype.__animate__ = function(animation) {
 Firmin.Animated.prototype.animate = function(description, duration, callback) {
     description.duration = duration;
     description.callback = callback;
-    
+
     return this.__animate__(new Firmin.Animation(description));
 };
 
@@ -1809,7 +1809,7 @@ Firmin.Animated.prototype.animate = function(description, duration, callback) {
 Firmin.Animated.prototype.animateR = function(description, duration, callback) {
     description.duration = duration;
     description.callback = callback;
-    
+
     return this.__animate__(new Firmin.Animation(description, this.__lastAnim));
 };
 
@@ -1851,9 +1851,9 @@ Firmin.Animated.prototype.animateR = function(description, duration, callback) {
  **/
 Firmin.animate = function(element, description, duration, callback) {
     var animated = new Firmin.Animated(element);
-    
+
     animated.animate(description, duration, callback);
-    
+
     return animated.run();
 };
 
@@ -1875,15 +1875,15 @@ Firmin.animateR = function(element, description, duration, callback) {
         transform = new Firmin.Transform(),
         matrix    = new Firmin.CSSMatrix(),
         cssStr    = element.style[Firmin.prefix + "Transform"];
-    
+
     matrix.setMatrixValue(cssStr);
-    
+
     transform.ctm       = matrix;
     previous.transform  = transform;
     animated.__lastAnim = previous;
-    
+
     animated.animateR(description, duration, callback);
-    
+
     return animated.run();
 };
 
@@ -2073,25 +2073,25 @@ Firmin.animateR = function(element, description, duration, callback) {
 
 Firmin.Transform.methods.forEach(function(method) {
     var relativeMethod = method + "R";
-    
+
     Firmin[method] = function(el, value, t, cb) {
         var description = {};
         description[method] = value;
         return Firmin.animate(el, description, t, cb);
     };
-    
+
     Firmin[relativeMethod] = function(el, value, t, cb) {
         var description = {};
         description[method] = value;
         return Firmin.animateR(el, description, t, cb);
     };
-    
+
     Firmin.Animated.prototype[method] = function(value, t, cb) {
         var description = {};
         description[method] = value;
         return this.animate(description, t, cb);
     };
-    
+
     Firmin.Animated.prototype[relativeMethod] = function(value, t, cb) {
         var description = {};
         description[method] = value;
